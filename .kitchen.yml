@@ -1,0 +1,28 @@
+driver:
+  name: vagrant
+  boot_timeout: 1200
+  gui: false
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+
+transport:
+  name: winrm
+  elevated: true
+  username: Administrator
+  password: Pass@word1
+
+platforms:
+  - name: windows-2012R2
+
+suites:
+  - name: default
+    run_list:
+      - recipe[apache_tomcat_windows::default]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
+    attributes:
