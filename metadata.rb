@@ -1,7 +1,7 @@
 name 'apache_tomcat_windows'
 maintainer 'The Authors'
 maintainer_email 'you@example.com'
-license 'All Rights Reserved'
+license 'BSD 3-Clause'
 description 'Installs/Configures apache_tomcat_windows'
 long_description 'Installs/Configures apache_tomcat_windows'
 version '0.1.0'
@@ -18,3 +18,4 @@ chef_version '>= 12.1' if respond_to?(:chef_version)
 # a Supermarket.
 #
 # source_url 'https://github.com/<insert_org_here>/apache_tomcat_windows'
+depends 'jdk'

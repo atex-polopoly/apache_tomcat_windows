@@ -15,9 +15,9 @@ customer = node['customer']
 tomcat_folder = "#{Dir::PROGRAM_FILES}\\Apache Software Foundation\\Tomcat 7.0"
 
 tomcat_download = remote_file 'apache tomcat' do
-  path lazy "#{Chef::Config[:file_cache_path]}\\apache_tomcat.exe"
-  source lazy "ftp://10.10.10.10/mirror/apache_tomcat/apache-tomcat-#{node[customer]['tomcat']['version']}.exe"
-  ftp_active_mode ftp_mode
+  path lazy {"#{Chef::Config[:file_cache_path]}\\apache_tomcat.exe"}
+  source lazy {"ftp://10.10.10.10/mirror/apache_tomcat/apache-tomcat-#{node[customer]['tomcat']['version']}.exe"}
+  ftp_active_mode node['ftp_active_mode']
   action :create
   not_if {Dir::exist?(tomcat_folder)}
 end

@@ -21,7 +21,7 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[apache_tomcat_windows::default]
+      - recipe[apache_tomcat_windows::install]
     verifier:
       inspec_tests:
         - test/smoke/default
