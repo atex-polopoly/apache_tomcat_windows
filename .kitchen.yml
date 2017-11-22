@@ -31,3 +31,6 @@ suites:
       testcustomer:
         tomcat:
           version: '7.0.82'
+      java:
+        jdk:
+          version: 8u151

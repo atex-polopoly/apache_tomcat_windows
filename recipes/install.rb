@@ -9,7 +9,7 @@ chef_gem 'win32-dir'
 
 require 'win32/dir'
 
-#include_recipe 'jdk::install'
+include_recipe 'jdk::install'
 
 customer = node['customer']
 tomcat_folder = "#{Dir::PROGRAM_FILES}\\Apache Software Foundation\\Tomcat 7.0"
