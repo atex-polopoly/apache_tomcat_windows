@@ -26,3 +26,8 @@ suites:
       inspec_tests:
         - test/smoke/default
     attributes:
+      customer: testcustomer
+      ftp_active_mode: false
+      testcustomer:
+        tomcat:
+          version: '7.0.82'
