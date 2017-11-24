@@ -8,6 +8,7 @@ include_recipe 'apache_tomcat_windows::install'
 
 chef_gem 'win32-dir'
 chef_gem 'rubyzip'
+chef_gem 'nokogiri'
 
 require 'win32/dir'
 
@@ -80,6 +81,18 @@ template 'tomcat config' do
         'tomcat_solr_war' => "#{tomcat_folder}/webapps/solr.war",
         'solr_home_dir' => "#{base_folder}#{prestige_solr}/solr"
     })
+    action :create
+end
+
+file 'modify tomcat server.xml' do
+    path "#{tomcat_folder}/conf/server.xml"
+    content lazy {
+        require 'nokogiri'
+        doc  = Nokogiri::XML(File::read "#{tomcat_folder}/conf/server.xml")
+        xml_node = doc.at_xpath("/Server/Service/Connector[@port='8080']")
+        xml_node.set_attribute('URIEncoding', 'UTF-8')
+        doc.to_s()
+    }
     action :create
 end
 
