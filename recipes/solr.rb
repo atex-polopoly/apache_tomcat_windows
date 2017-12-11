@@ -15,7 +15,7 @@ require 'win32/dir'
 tomcat_folder = "#{Dir::PROGRAM_FILES}\\Apache Software Foundation\\Tomcat 7.0"
 tomcat_svc = 'tomcat7'
 base_folder = 'c:/'
-prestige_solr = 'prestige_solr_3_4'
+prestige_solr = 'prestige_solr_4_5_1'
 solr_lang = 'eng' #node['solr']['language'] || 'eng'
 ftp_url = 'ftp-eu.atex.com/P6/P6.0/P6.0.10/Atex_Content_P-Series_6.0.10_B127_06Oct2017_x64'
 ftp_user = 'managedservices'
@@ -32,11 +32,6 @@ service 'tomcat stop' do
     service_name tomcat_svc
     action :stop
 end 
-
-directory "#{base_folder}#{prestige_solr}" do
-    action :delete
-    recursive true
-end
 
 ruby_block 'unzip prestige software' do
     block do
@@ -57,13 +52,37 @@ end
 file 'modify solr.xml' do
     path "#{base_folder}#{prestige_solr}/solr/solr.xml"
     content lazy {
-        data = File::read "#{base_folder}#{prestige_solr}/solr/solr.xml"
-        data = data.gsub(/<core name=\"production\" instanceDir=\"#{solr_lang}\/production" \/>/,
-        "<core name=\"production\" instanceDir=\"#{base_folder}#{prestige_solr}/solr/#{solr_lang}/production\"/>")
-        data = data.gsub(/<core name=\"archive\" instanceDir=\"#{solr_lang}\/archive" \/>/,
-        "<core name=\"archive\" instanceDir=\"#{base_folder}#{prestige_solr}/solr/#{solr_lang}/archive\"/>")
-        File::write "#{base_folder}#{prestige_solr}/solr/solr.xml", data
-        data
+        require 'nokogiri'
+        doc  = Nokogiri::XML(File::read "#{base_folder}#{prestige_solr}/solr/solr.xml")
+        xml_node = doc.at_xpath("/solr/cores/core[@name='production']")
+        xml_node['instanceDir'] = "#{base_folder}#{prestige_solr}/solr/#{solr_lang}/production"
+        xml_node = doc.at_xpath("/solr/cores/core[@name='archive']")
+        xml_node['instanceDir'] = "#{base_folder}#{prestige_solr}/solr/#{solr_lang}/archive"
+        doc.to_s()
+    }
+    action :create
+end
+
+file 'modify xxx/solr.xml' do
+    path "#{base_folder}#{prestige_solr}/solr/#{solr_lang}/production/conf/solrconfig.xml"
+    content lazy {
+        require 'nokogiri'
+        doc  = Nokogiri::XML(File::read "#{base_folder}#{prestige_solr}/solr/#{solr_lang}/production/conf/solrconfig.xml")
+        xml_node = doc.at_xpath("/config/dataDir")
+        xml_node.content=("#{base_folder}#{prestige_solr}/data/solr/#{solr_lang}/production")
+        doc.to_s()
+    }
+    action :create
+end
+
+file 'modify xxx/solr.xml' do
+    path "#{base_folder}#{prestige_solr}/solr/#{solr_lang}/archive/conf/solrconfig.xml"
+    content lazy {
+        require 'nokogiri'
+        doc  = Nokogiri::XML(File::read "#{base_folder}#{prestige_solr}/solr/#{solr_lang}/archive/conf/solrconfig.xml")
+        xml_node = doc.at_xpath("/config/dataDir")
+        xml_node.content=("#{base_folder}#{prestige_solr}/data/solr/#{solr_lang}/archive")
+        doc.to_s()
     }
     action :create
 end
@@ -74,12 +93,19 @@ file 'copy solr.war' do
     action :create
 end
 
+ruby_block "copy sl4j jars to tomcat" do
+    block do
+      FileUtils.cp_r("#{base_folder}#{prestige_solr}/lib/ext/.", "#{tomcat_folder}/lib")
+    end
+end
+
 template 'tomcat config' do
     path "#{tomcat_folder}/conf/Catalina/localhost/solr.xml"
     source 'tomcat-config.xml.erb'
     variables({
         'tomcat_solr_war' => "#{tomcat_folder}/webapps/solr.war",
-        'solr_home_dir' => "#{base_folder}#{prestige_solr}/solr"
+        'solr_home_dir' => "#{base_folder}#{prestige_solr}/solr",
+        'log4j_properties_dir' => "#{base_folder}#{prestige_solr}/resources"
     })
     action :create
 end

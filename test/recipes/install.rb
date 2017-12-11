@@ -10,6 +10,6 @@ describe service('tomcat7') do
   it { should be_running }
 end
 
-describe directory('C:\\program_files\\Apache Software Foundation\\Tomcat 7.0') do
+describe directory('C:\\program files\\Apache Software Foundation\\Tomcat 7.0') do
   it { should exist }
 end
