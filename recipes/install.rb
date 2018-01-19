@@ -4,22 +4,19 @@
 #
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
+include_recipe 'jdk::install'
+
 chef_gem 'win32-service'
 chef_gem 'win32-dir'
 
 require 'win32/dir'
 
-include_recipe 'jdk::install'
-
-customer = node['customer']
-tomcat_folder = "#{Dir::PROGRAM_FILES}\\Apache Software Foundation\\Tomcat 7.0"
-
 tomcat_download = remote_file 'apache tomcat' do
   path "#{Chef::Config[:file_cache_path]}\\apache_tomcat.exe"
-  source "ftp://10.10.10.10/mirror/apache_tomcat/apache-tomcat-#{node['tomcat']['version']}.exe"
+  source {"ftp://#{node[:ftp][:host]}#{node[:ftp][:path]}/apache_tomcat/apache-tomcat-#{node[:tomcat][:version]}.exe"}
   ftp_active_mode node['ftp_active_mode']
   action :create
-  not_if {Dir::exist?(tomcat_folder)}
+  not_if {Dir::exist?("#{Dir::PROGRAM_FILES}\\#{node[:tomcat][:win_install_dir]}")}
 end
 
 # Install Tomcat (auto-searches for installed Java)
@@ -35,7 +32,6 @@ file "#{Chef::Config[:file_cache_path]}\\apache_tomcat.exe" do
 end
 
 # Start it up
-service 'start tomcat service' do
-  service_name 'tomcat7'
+service node[:tomcat][:svc_name] do
   action [:enable, :start]
 end

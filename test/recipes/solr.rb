@@ -12,8 +12,8 @@ end
 
 # Check core files updated
 describe file('c:\\prestige_solr_4_5_1\\solr\\solr.xml') do
-    its('content') { should match %r|<solr.*>.*<cores.*>.*<core.*instanceDir="c:/prestige_solr_4_5_1/solr/eng/production"|m }
-    its('content') { should match %r|<solr.*>.*<cores.*>.*<core.+instanceDir="c:/prestige_solr_4_5_1/solr/eng/archive"|m }
+    its('content') { should match %r|<solr.*>.*<cores.*>.*<core.*instanceDir="c:\\prestige_solr_4_5_1\\solr\\eng\\production"|m }
+    its('content') { should match %r|<solr.*>.*<cores.*>.*<core.+instanceDir="c:\\prestige_solr_4_5_1\\solr\\eng\\archive"|m }
 end
 
 # Check the WAR file is copied

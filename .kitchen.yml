@@ -5,6 +5,10 @@ driver:
 
 provisioner:
   name: chef_zero
+  environments_path: ..\..\environments
+  roles_path: ..\..\roles
+  client_rb:
+    environment: emg-stage
 
 verifier:
   name: inspec
@@ -24,13 +28,7 @@ suites:
       - recipe[apache_tomcat_windows::install]
     verifier:
       inspec_tests:
-        - test/smoke/default
+        - test/recipes/install.rb
+        - test/recipes/solr.rb
     attributes:
-      customer: testcustomer
       ftp_active_mode: false
-      testcustomer:
-        tomcat:
-          version: '7.0.82'
-      java:
-        jdk:
-          version: 8u151
