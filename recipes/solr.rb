@@ -22,7 +22,7 @@ solr_lang = node[:prestige][:solr][:lang]
 ftp_pwd = chef_vault_item('ftp-servers', 'prestige-ms')['managedservices']
 
 remote_file "#{Chef::Config[:file_cache_path]}\\#{solr_zip_file}" do
-  source URI.escape("ftp://managedservices:#{ftp_pwd}@#{node[:prestige][:ftp][:host]}#{node[:prestige][:ftp][:path]}/#{solr_zip_file}")
+  source URI.escape("ftp://managedservices:#{ftp_pwd}@#{node[:prestige][:ftp][:host]}#{node[:prestige][:ftp][:path]}#{solr_zip_file}")
   action :create
 end
 
