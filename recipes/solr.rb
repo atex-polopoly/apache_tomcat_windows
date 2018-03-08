@@ -50,7 +50,7 @@ end
 file "#{solr_install_dir}\\solr\\solr.xml" do
   content lazy {
     require 'nokogiri'
-    doc  = Nokogiri::XML(File::read "#{solr_install_dir}\\solr\\solr.xml")
+    doc  = Nokogiri::XML(File::read("#{solr_install_dir}\\solr\\solr.xml"))
     xml_node = doc.at_xpath("/solr/cores/core[@name='production']")
     xml_node['instanceDir'] = "#{solr_install_dir}\\solr\\#{solr_lang}\\production"
     xml_node = doc.at_xpath("/solr/cores/core[@name='archive']")
@@ -63,9 +63,9 @@ end
 file "#{solr_install_dir}\\solr\\#{solr_lang}\\production\\conf\\solrconfig.xml" do
   content lazy {
     require 'nokogiri'
-    doc  = Nokogiri::XML(File::read "#{solr_install_dir}\\solr\\#{solr_lang}\\production\\conf\\solrconfig.xml")
-    xml_node = doc.at_xpath("/config/dataDir")
-    xml_node.content=("#{solr_install_dir}\\data\\solr\\#{solr_lang}\\production")
+    doc = Nokogiri::XML(File::read("#{solr_install_dir}\\solr\\#{solr_lang}\\production\\conf\\solrconfig.xml"))
+    xml_node = doc.at_xpath('/config/dataDir')
+    xml_node.content="#{solr_install_dir}_data\\solr\\#{solr_lang}\\production"
     doc.to_s()
   }
   action :create
@@ -74,9 +74,9 @@ end
 file "#{solr_install_dir}\\solr\\#{solr_lang}\\archive\\conf\\solrconfig.xml" do
   content lazy {
     require 'nokogiri'
-    doc  = Nokogiri::XML(File::read "#{solr_install_dir}\\solr\\#{solr_lang}\\archive\\conf\\solrconfig.xml")
-    xml_node = doc.at_xpath("/config/dataDir")
-    xml_node.content=("#{solr_install_dir}\\data\\solr\\#{solr_lang}\\archive")
+    doc  = Nokogiri::XML(File::read("#{solr_install_dir}\\solr\\#{solr_lang}\\archive\\conf\\solrconfig.xml"))
+    xml_node = doc.at_xpath('/config/dataDir')
+    xml_node.content="#{solr_install_dir}_data\\solr\\#{solr_lang}\\archive"
     doc.to_s()
   }
   action :create
@@ -125,7 +125,7 @@ end
 file "#{tomcat_folder}\\conf\\server.xml" do
   content lazy {
     require 'nokogiri'
-    doc  = Nokogiri::XML(File::read "#{tomcat_folder}\\conf\\server.xml")
+    doc  = Nokogiri::XML(File::read("#{tomcat_folder}\\conf\\server.xml"))
     xml_node = doc.at_xpath("/Server/Service/Connector[@port='8080']")
     xml_node.set_attribute('URIEncoding', 'UTF-8')
     doc.to_s()
