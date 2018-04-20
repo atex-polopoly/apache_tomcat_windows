@@ -19,10 +19,9 @@ tomcat_svc = node[:tomcat][:svc_name]
 solr_install_dir = "#{node[:prestige][:solr][:unzip_destination]}\\prestige_solr_#{node[:prestige][:solr][:version]}"
 solr_zip_file = "prestige_solr_#{node[:prestige][:solr][:version]}.zip"
 solr_lang = node[:prestige][:solr][:lang]
-ftp_pwd = chef_vault_item('ftp-servers', 'prestige-ms')['managedservices']
 
 remote_file "#{Chef::Config[:file_cache_path]}\\#{solr_zip_file}" do
-  source URI.escape("ftp://managedservices:#{ftp_pwd}@#{node[:prestige][:ftp][:host]}#{node[:prestige][:ftp][:path]}#{solr_zip_file}")
+  source URI.escape("http://#{node[:prestige][:mirror][:host]}#{node[:prestige][:mirror][:path]}#{solr_zip_file}")
   action :create
 end
 
