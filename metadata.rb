@@ -4,7 +4,7 @@ maintainer_email 'you@example.com'
 license 'BSD 3-Clause'
 description 'Installs/Configures apache_tomcat_windows'
 long_description 'Installs/Configures apache_tomcat_windows'
-version '0.1.0'
+version '0.1.1'
 chef_version '>= 12.1' if respond_to?(:chef_version)
 
 # The `issues_url` points to the location where issues for this cookbook are

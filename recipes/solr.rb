@@ -23,10 +23,12 @@ solr_lang = node[:prestige][:solr][:lang]
 remote_file "#{Chef::Config[:file_cache_path]}\\#{solr_zip_file}" do
   source URI.escape("http://#{node[:prestige][:mirror][:host]}#{node[:prestige][:mirror][:path]}#{solr_zip_file}")
   action :create
+  not_if { ::File.exists?("#{tomcat_folder}\\webapps\\solr.war") }
 end
 
 service tomcat_svc do
   action :stop
+  not_if { ::File.exists?("#{tomcat_folder}\\webapps\\solr.war") }
 end
 
 ruby_block 'unzip prestige software' do
@@ -44,6 +46,7 @@ ruby_block 'unzip prestige software' do
     end
   end
   action :run
+  not_if { ::File.exists?("#{tomcat_folder}\\webapps\\solr.war") }
 end
 
 file "#{solr_install_dir}\\solr\\solr.xml" do
@@ -57,6 +60,7 @@ file "#{solr_install_dir}\\solr\\solr.xml" do
     doc.to_s()
   }
   action :create
+  not_if { ::File.exists?("#{solr_install_dir}\\solr\\solr.xml") }
 end
 
 file "#{solr_install_dir}\\solr\\#{solr_lang}\\production\\conf\\solrconfig.xml" do
@@ -68,6 +72,7 @@ file "#{solr_install_dir}\\solr\\#{solr_lang}\\production\\conf\\solrconfig.xml"
     doc.to_s()
   }
   action :create
+  not_if { ::File.exists?("#{solr_install_dir}\\solr\\#{solr_lang}\\production\\conf\\solrconfig.xml") }
 end
 
 file "#{solr_install_dir}\\solr\\#{solr_lang}\\archive\\conf\\solrconfig.xml" do
@@ -79,6 +84,7 @@ file "#{solr_install_dir}\\solr\\#{solr_lang}\\archive\\conf\\solrconfig.xml" do
     doc.to_s()
   }
   action :create
+  not_if { ::File.exists?("#{solr_install_dir}\\solr\\#{solr_lang}\\archive\\conf\\solrconfig.xml" ) }
 end
 
 remote_file "#{tomcat_folder}\\webapps\\solr.war" do
