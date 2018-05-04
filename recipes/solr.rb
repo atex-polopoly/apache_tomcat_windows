@@ -60,7 +60,6 @@ file "#{solr_install_dir}\\solr\\solr.xml" do
     doc.to_s()
   }
   action :create
-  not_if { ::File.exists?("#{solr_install_dir}\\solr\\solr.xml") }
 end
 
 file "#{solr_install_dir}\\solr\\#{solr_lang}\\production\\conf\\solrconfig.xml" do
@@ -72,7 +71,6 @@ file "#{solr_install_dir}\\solr\\#{solr_lang}\\production\\conf\\solrconfig.xml"
     doc.to_s()
   }
   action :create
-  not_if { ::File.exists?("#{solr_install_dir}\\solr\\#{solr_lang}\\production\\conf\\solrconfig.xml") }
 end
 
 file "#{solr_install_dir}\\solr\\#{solr_lang}\\archive\\conf\\solrconfig.xml" do
@@ -84,7 +82,6 @@ file "#{solr_install_dir}\\solr\\#{solr_lang}\\archive\\conf\\solrconfig.xml" do
     doc.to_s()
   }
   action :create
-  not_if { ::File.exists?("#{solr_install_dir}\\solr\\#{solr_lang}\\archive\\conf\\solrconfig.xml" ) }
 end
 
 remote_file "#{tomcat_folder}\\webapps\\solr.war" do
