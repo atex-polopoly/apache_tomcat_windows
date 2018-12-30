@@ -5,10 +5,8 @@ driver:
 
 provisioner:
   name: chef_zero
-  environments_path: ..\..\environments
-  roles_path: ..\..\roles
   client_rb:
-    environment: emg-stage
+    environment: test-env
 
 verifier:
   name: inspec
@@ -25,14 +23,9 @@ platforms:
 suites:
   - name: default
     data_bags_path: test/integration/default/data_bags
-    provisioner:
-      client.rb:
-          environment: emg-stage
     run_list:
-      - recipe[apache_tomcat_windows::install]
+      - recipe[apache_tomcat_windows::default]
     verifier:
       inspec_tests:
         - test/recipes/install.rb
         - test/recipes/solr.rb
-    attributes:
-      ftp_active_mode: false

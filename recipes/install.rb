@@ -12,27 +12,25 @@ chef_gem 'win32-dir'
 require 'win32/dir'
 
 tomcat_folder = "#{Dir::PROGRAM_FILES}\\#{node[:tomcat][:win_install_dir]}"
+tomcat_svc = node[:tomcat][:svc_name]
+tomcat_installed = File.exist?("#{tomcat_folder}\\bin\\#{tomcat_svc}.exe")
 
-tomcat_download = remote_file 'apache tomcat' do
+remote_file 'apache tomcat' do
   path "#{Chef::Config[:file_cache_path]}\\apache_tomcat.exe"
   source "http://#{node[:mirror][:host]}#{node[:mirror][:path]}/apache_tomcat/apache-tomcat-#{node[:tomcat][:version]}.exe"
   action :create
-  not_if {Dir::exist?(tomcat_folder)}
+  not_if { tomcat_installed }
 end
 
-# Install Tomcat (auto-searches for installed Java)
 execute 'tomcat install' do
   command "#{Chef::Config[:file_cache_path]}\\apache_tomcat.exe /S"
-  not_if { Dir::exist?(tomcat_folder) }
-  only_if { File.exist?("#{Chef::Config[:file_cache_path]}\\apache_tomcat.exe") }
+  not_if { tomcat_installed }
 end
 
 file "#{Chef::Config[:file_cache_path]}\\apache_tomcat.exe" do
   action :delete
-  only_if {File.exist?("#{Chef::Config[:file_cache_path]}\\apache_tomcat.exe")}
 end
 
-# Start it up
 service node[:tomcat][:svc_name] do
   action [:enable, :start]
 end

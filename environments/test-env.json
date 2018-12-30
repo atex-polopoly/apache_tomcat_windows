@@ -1,0 +1,33 @@
+{
+    "name": "test-env",
+    "description": "Test environment",
+    "chef_type": "environment",
+    "json_class": "Chef::Environment",
+    "cookbook_versions": {},
+    "default_attributes": {
+        "mirror": {
+            "host": "mirror.cloud.atex.com:8081",
+            "path": "/"
+        },
+        "java": {
+            "jdk": {
+                "version": "1.8.0_161"
+            }
+        },
+        "tomcat": {
+            "version": "7.0.82",
+            "svc_name": "tomcat7",
+            "win_install_dir": "Apache Software Foundation\\Tomcat 7.0"
+        },
+        "prestige": {
+            "solr": {
+                "version": "4_5_1",
+                "unzip_destination": "c:",
+                "lang": "eng"
+            },
+            "mirror": {
+                "path": "/prestige/P6.01/P6.1.06/P6.1.6 - Build 69 Patch 004/"
+            }
+        }
+   }
+}

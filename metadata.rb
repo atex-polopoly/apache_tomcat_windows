@@ -1,10 +1,10 @@
 name 'apache_tomcat_windows'
-maintainer 'The Authors'
-maintainer_email 'you@example.com'
+maintainer 'Atex Managed Services'
+maintainer_email 'managed-services@atex.com'
 license 'BSD 3-Clause'
 description 'Installs/Configures apache_tomcat_windows'
 long_description 'Installs/Configures apache_tomcat_windows'
-version '0.1.0'
+version '0.2.0'
 chef_version '>= 12.1' if respond_to?(:chef_version)
 
 # The `issues_url` points to the location where issues for this cookbook are
@@ -18,5 +18,5 @@ chef_version '>= 12.1' if respond_to?(:chef_version)
 # a Supermarket.
 #
 # source_url 'https://github.com/<insert_org_here>/apache_tomcat_windows'
+
 depends 'jdk'
-depends 'chef-vault'
